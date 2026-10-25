@@ -8,8 +8,6 @@ FileRun is a robust file management system that offers a range of features to en
 Below is the docker-compose.yml configuration for setting up the FileRun environment, which includes the necessary services such as the database, web server, Tika for document processing, and Elasticsearch for enhanced search capabilities.
 
 ```yaml
-version: "3.8"
-
 volumes:
   db:
     driver: local
