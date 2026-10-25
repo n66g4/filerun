@@ -11,6 +11,8 @@ Below is the docker-compose.yml configuration for setting up the FileRun environ
 volumes:
   db:
     driver: local
+  html:
+    driver: local
   user-files:
     driver: local
   config:
@@ -24,23 +26,25 @@ services:
     container_name: filerun_mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: YOUR_DATABASE_ROOT_PASSWORD
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: guo1987924
       MYSQL_USER: filerun-user
-      MYSQL_PASSWORD: YOUR_DATABASE_USER_PASSWORD
+      MYSQL_PASSWORD: guo1987924
       MYSQL_DATABASE: filerun-db
     volumes:
-      - db:/var/lib/mysql
+      - ./db:/var/lib/mysql
 
   web:
     image: mrizkihidayat66/filerun
     container_name: filerun_web
     restart: always
     environment:
+      TZ: Asia/Shanghai
       FR_DB_HOST: db
       FR_DB_PORT: 3306
       FR_DB_NAME: filerun-db
       FR_DB_USER: filerun-user
-      FR_DB_PASS: YOUR_DATABASE_USER_PASSWORD
+      FR_DB_PASS: guo1987924
       APACHE_RUN_USER: www-data
       APACHE_RUN_USER_ID: 33
       APACHE_RUN_GROUP: www-data
@@ -50,8 +54,9 @@ services:
     ports:
       - 5003:80
     volumes:
-      - user-files:/user-files
-      - config:/config
+      - html:/var/www/html
+      - ./user-files:/user-files
+      - ./nginx/upload.conf:/etc/nginx/conf.d/upload.conf:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
